@@ -6,6 +6,7 @@
 {{- else }}
     dir "/data"
     port {{ .Values.redis.port }}
+    aclfile /data/conf/users.acl
     {{- range $key, $value := .Values.redis.config }}
     {{ $key }} {{ $value }}
     {{- end }}
@@ -131,7 +132,7 @@
         ESCAPED_AUTH=$(echo "$AUTH" | sed -e 's/[\/&]/\\&/g');
         sed -i "s/replace-default-auth/${ESCAPED_AUTH}/" "$REDIS_CONF" "$SENTINEL_CONF"
     fi
-
+    touch /data/conf/users.acl
     echo "Ready..."
 {{- end }}
 
