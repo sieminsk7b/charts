@@ -6,7 +6,6 @@
 {{- else }}
     dir "/data"
     port {{ .Values.redis.port }}
-    aclfile /data/conf/acl.conf
     {{- range $key, $value := .Values.redis.config }}
     {{ $key }} {{ $value }}
     {{- end }}
@@ -14,6 +13,7 @@
     requirepass replace-default-auth
     masterauth replace-default-auth
 {{- end }}
+    aclfile /data/conf/acl.conf
 {{- end }}
 {{- end }}
 
