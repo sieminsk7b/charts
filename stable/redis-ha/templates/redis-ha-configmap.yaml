@@ -11,8 +11,6 @@ metadata:
 data:
   redis.conf: |
 {{- include "config-redis.conf" . }}
-  acl.conf: |
-{{- include "acl-redis.conf" . }}
 
   sentinel.conf: |
 {{- include "config-sentinel.conf" . }}
