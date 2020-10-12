@@ -10,7 +10,6 @@
     {{ $key }} {{ $value }}
     {{- end }}
 {{- if .Values.auth }}
-    requirepass replace-default-auth
     masterauth replace-default-auth
 {{- end }}
     aclfile /data/conf/acl.conf
@@ -131,6 +130,11 @@
         echo "Setting auth values"
         ESCAPED_AUTH=$(echo "$AUTH" | sed -e 's/[\/&]/\\&/g');
         sed -i "s/replace-default-auth/${ESCAPED_AUTH}/" "$REDIS_CONF" "$SENTINEL_CONF"
+        if grep -e 'user default' /data/conf/acl.conf ; then
+            sed -i /data/conf/acl.conf -e "s/user default.*$/user default on >${ESCAPED_AUTH} ~* +@all/"
+        else
+            echo "user default on >${ESCAPED_AUTH} ~* +@all" >> /data/conf/acl.conf
+        fi
     fi
     touch /data/conf/acl.conf
     echo "Ready..."
